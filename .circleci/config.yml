@@ -13,7 +13,7 @@ commands:
           command: |
             echo "Destroy environment: << parameters.workflow_id >> "
             # Your code here
-            #aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             #aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force  # delete s3 bucket
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
@@ -142,7 +142,6 @@ jobs:
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople                
-
       - run:
           name: Add back-end ip to ansible inventory
           command: |
