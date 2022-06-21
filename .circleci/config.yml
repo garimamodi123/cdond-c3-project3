@@ -205,6 +205,7 @@ jobs:
             cd .circleci/ansible
             echo "inventory file :"
             cat inventory.txt
+            export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i inventory.txt configure-server.yml
             #ansible-playbook -vvvv -i inventory.txt ansible/roles/configure-server/tasks/main.yml -u ubuntu
       - destroy-environment:
