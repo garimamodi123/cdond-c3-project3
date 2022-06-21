@@ -147,7 +147,8 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            # Your code here            
+            # Your code here 
+            echo "[web]" > inventory.txt           
             cat inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
@@ -160,6 +161,54 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.11
+    steps:
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["5b:61:b7:37:20:ec:32:d8:f6:59:f5:11:13:1e:2b:1c"]      
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |          
+            apk update
+            apk upgrade
+            apk add unzip
+            apk add curl
+            /usr/local/bin/python -m pip install --upgrade pip
+      - run:
+          name: Install ansible
+          command: |
+            # your code here
+            apk add --update ansible
+            ansible --version
+      - run:
+          name: Install aws
+          command: |
+            # your code here
+            pip install awscli --upgrade
+            aws --version
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            pwd
+            cd .circleci/ansible
+            echo "inventory file :"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure-server.yml
+            #ansible-playbook -vvvv -i inventory.txt ansible/roles/configure-server/tasks/main.yml -u ubuntu
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+
+      # Here's where you will add some code to rollback on failure
 
 
 
@@ -182,3 +231,5 @@ workflows:
           requires: [build-backend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
