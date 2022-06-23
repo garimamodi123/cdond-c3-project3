@@ -197,15 +197,14 @@ jobs:
             # your code here
             pip install awscli --upgrade
             aws --version
-      - run:
+     - run:
           name: Configure server
           command: |
             # Your code here
             pwd
             cd .circleci/ansible
-            echo "inventory file :"
+            echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i inventory.txt configure-server.yml
             #ansible-playbook -vvvv -i inventory.txt ansible/roles/configure-server/tasks/main.yml -u ubuntu
       - destroy-environment:
