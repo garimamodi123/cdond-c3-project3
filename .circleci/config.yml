@@ -14,7 +14,7 @@ commands:
           command: |
             echo "Destroy environment: << parameters.workflow_id >> "
             # Your code here
-            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+            #aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             #aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force  # delete s3 bucket
             #aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
             #aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
@@ -193,7 +193,7 @@ jobs:
       # Add ssh keys with fingerprint
       # attach workspace
       - checkout
-      #- install_ansible
+      
       - add_ssh_keys:
           fingerprints: ["5b:61:b7:37:20:ec:32:d8:f6:59:f5:11:13:1e:2b:1c"]      
       - attach_workspace:
