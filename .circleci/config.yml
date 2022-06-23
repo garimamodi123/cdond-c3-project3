@@ -13,10 +13,32 @@ commands:
           command: |
             echo "Destroy environment: << parameters.workflow_id >> "
             # Your code here
-            #aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-            aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force  # delete s3 bucket
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+            #aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force  # delete s3 bucket
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+  
+   revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here
+      workflow_id:
+          type: string
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          when: on_fail
+          command: |
+            SUCCESS=$(curl --insecure  https://kvdb.io/TgV7H7gtjJZmGRJXJwZJpP/migration_<< parameters.workflow_id >>)
+            if(( $SUCCESS==1 ));
+            then
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+                echo "rollback finish"
+            fi
+            echo "Revert migrations finish..."
 
   
 
@@ -207,7 +229,11 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
             #ansible-playbook -vvvv -i inventory.txt ansible/roles/configure-server/tasks/main.yml -u ubuntu
+          environment:
+            ANSIBLE_HOST_KEY_CHECKING: false
       - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
       # Here's where you will add some code to rollback on failure
