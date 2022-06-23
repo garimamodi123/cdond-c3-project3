@@ -44,35 +44,6 @@ commands:
                 echo "rollback finish"
             fi
             echo "Revert migrations finish..."
-
-  install-awscli:
-    description: Install AWS CLI
-    parameters:
-      schema:
-        type: string
-
-    steps:
-      -run:
-        name: Install AWS CLI
-        command: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-
-  install-ansible:
-    description: Install Ansible
-    steps:
-      -run:
-        name: Install Ansible
-        command: |
-          sudo apt update
-          sudo apt install software-properties-common
-          sudo add-apt-repository --yes --update ppa:ansible/ansible
-          sudo apt install ansible
-
-  
-
-
 jobs:
   build-frontend:
     docker:
@@ -227,8 +198,26 @@ jobs:
           fingerprints: ["5b:61:b7:37:20:ec:32:d8:f6:59:f5:11:13:1e:2b:1c"]      
       - attach_workspace:
           at: ~/
-      - install-ansible
-      - install-awscli
+      - run:
+          name: Install dependencies
+          command: |          
+            apk update
+            apk upgrade
+            apk add unzip
+            apk add curl
+            /usr/local/bin/python -m pip install --upgrade pip
+      - run:
+          name: Install ansible
+          command: |
+            # your code here
+            apk add --update ansible
+            ansible --version
+      - run:
+          name: Install aws
+          command: |
+            # your code here
+            pip install awscli --upgrade
+            aws --version
       - run:
           name: Configure server
           command: |
