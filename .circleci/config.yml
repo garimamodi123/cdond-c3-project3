@@ -47,6 +47,9 @@ commands:
 
   install-awscli:
     description: Install AWS CLI
+    schema:
+|   |     type: array
+
     steps:
       -run:
         name: Install AWS CLI
