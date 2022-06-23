@@ -197,7 +197,7 @@ jobs:
             # your code here
             pip install awscli --upgrade
             aws --version
-     - run:
+      - run:
           name: Configure server
           command: |
             # Your code here
