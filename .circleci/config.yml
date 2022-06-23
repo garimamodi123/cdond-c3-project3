@@ -45,7 +45,7 @@ commands:
             fi
             echo "Revert migrations finish..."
 
-  Install-AWSCLI:
+  install-awscli:
     description: Install AWS CLI
     steps:
       -run:
@@ -55,7 +55,7 @@ commands:
           unzip awscliv2.zip
           sudo ./aws/install
 
-  Install-Ansible:
+  install-ansible:
     description: Install Ansible
     steps:
       -run:
@@ -223,8 +223,8 @@ jobs:
           fingerprints: ["5b:61:b7:37:20:ec:32:d8:f6:59:f5:11:13:1e:2b:1c"]      
       - attach_workspace:
           at: ~/
-      - Install-Ansible
-      - Install-AWSCLI
+      - install-ansible
+      - install-awscli
       - run:
           name: Configure server
           command: |
