@@ -190,12 +190,14 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
+      #- image: python:3.7-alpine3.11
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
       - checkout
+      -install_ansible
       - add_ssh_keys:
           fingerprints: ["5b:61:b7:37:20:ec:32:d8:f6:59:f5:11:13:1e:2b:1c"]      
       - attach_workspace:
@@ -230,12 +232,11 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
             #ansible-playbook -vvvv -i inventory.txt ansible/roles/configure-server/tasks/main.yml -u ubuntu
-          environment:
-            ANSIBLE_HOST_KEY_CHECKING: false
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
-      - revert-migrations:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+          #environment:
+           # ANSIBLE_HOST_KEY_CHECKING: false
+      - destroy-environment
+      #- revert-migrations:
+       #   workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
       # Here's where you will add some code to rollback on failure
 
@@ -257,8 +258,8 @@ workflows:
           requires: [build-backend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-    #  - configure-infrastructure:
-     #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
      # - run-migrations:
        #   requires: [configure-infrastructure]
       #- deploy-frontend:
