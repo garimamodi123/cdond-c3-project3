@@ -3,7 +3,7 @@
   become: true
   shell:
     curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -y nodejs
-    upgrade: "yes"
+    
 
 - name: "install dependencies."
   become: true
