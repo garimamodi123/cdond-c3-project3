@@ -49,7 +49,7 @@ commands:
     description: Install AWS CLI
     parameters:
       schema:
-|   |     type: string
+        type: string
 
     steps:
       -run:
