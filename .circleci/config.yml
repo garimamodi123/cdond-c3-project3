@@ -481,11 +481,12 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-              aws cloudformation deploy \
+              aws cloudformation stack-update \
               --template-file .circleci/files/cloudfront.yml \
-              --stack-name udapeople-cloudfront \
-              --tags project=udapeople-cicd \
-              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --stack-name InitialStack1 \
+              --tags project=udapeople\
+              --parameter-overrides WorkflowID="udapeople-347865384227"
+              #--parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"  
               echo OldWorkflowID: "${OldWorkflowID}"
               echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"      
       - persist_to_workspace:
