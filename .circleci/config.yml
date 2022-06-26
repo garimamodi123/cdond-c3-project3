@@ -190,6 +190,10 @@ jobs:
       # Docker image here that supports Ansible
       - image: python:3.7-alpine3.11
     steps:
+      - run:          
+          name: SSH or Git CLI client                 
+          command: |            
+            yum install -y openssh-client git
       - checkout
       - add_ssh_keys:
           fingerprints: ["5b:61:b7:37:20:ec:32:d8:f6:59:f5:11:13:1e:2b:1c"]
@@ -446,10 +450,10 @@ jobs:
               if curl "${API_URL}/api/status" | grep "ok"
               then
                 echo SUCCESS
-                exit 0
+                return 0
               else
                 echo FAIL
-                exit 1
+                return 1
               fi
       
       - destroy-environment:
