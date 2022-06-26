@@ -3,7 +3,7 @@ Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02] : ht
 URL for my CloudFront distribution [URL03]: https://daagra5hmnigl.cloudfront.net/#/employees
 Public URLs to deployed application back-end in EC2 [URL04]:http://3.94.61.230:3030/api/status 
 https://ec2-3-94-61-230.compute-1.amazonaws.com:3030/api/status
-Public URL to your Prometheus Server [URL05]DNS: ec2-44-204-163-155.compute-1.amazonaws.com
+Public URL to your Prometheus Server [URL05]DNS: http://ec2-54-224-109-208.compute-1.amazonaws.com
 
 
 
