@@ -144,10 +144,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       # Checkout code from git
-      - run:          
-          name: SSH or Git CLI client                 
-          command: |            
-            yum install -y openssh-client git
+      #- run:          
+       #   name: SSH or Git CLI client                 
+        #  command: |            
+         #   yum install -y openssh-client git
       - checkout
       - run: yum -y install tar gzip
       - run:
