@@ -436,7 +436,7 @@ jobs:
           name: Backend smoke test.
           command: |
             
-            export BACKEND_IP=$(aws ec2 describe-instances \
+              export BACKEND_IP=$(aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                 --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                 --output text)
@@ -446,10 +446,10 @@ jobs:
               if curl "${API_URL}/api/status" | grep "ok"
               then
                 echo SUCCESS
-                return 0
+                exit 0
               else
                 echo FAIL
-                return 1
+                exit 1
               fi
       
       - destroy-environment:
