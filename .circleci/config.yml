@@ -6,7 +6,7 @@ commands:
       # Add parameter here  
       workflow_id:
           type: string
-          #default: ${CIRCLE_WORKFLOW_ID:0:7}
+          default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Destroy environments
@@ -16,7 +16,7 @@ commands:
             # Your code here
             
             aws cloudformation delete-stack --stack-name udapeople-backend--<< parameters.workflow_id >>
-            aws s3 rm s3://udapeople--<< parameters.workflow_id >> --recursive
+            aws s3 rb s3://udapeople--<< parameters.workflow_id >> --force
             aws cloudformation delete-stack --stack-name "udapeople-frontend--<< parameters.workflow_id >>
   
   revert-migrations:
@@ -25,7 +25,7 @@ commands:
       # Add parameter here
       workflow_id:
           type: string
-          #default: ${CIRCLE_WORKFLOW_ID:0:7} 
+          default: ${CIRCLE_WORKFLOW_ID:0:7} 
     steps:
       - run:
           name: Revert migrations
@@ -85,14 +85,18 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontend-test]
       - run:
           name: Run frontend test
           command: |
             cd frontend
             npm install
             npm run test        
-            exit 0     
+            exit 0  
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-test
+
   test-backend:
     docker:
       # Docker image here
@@ -100,13 +104,16 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend-test]
       - run:
           name: Run backend test
           command: |
             cd backend
             npm install
             npm run test
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-test
 
   scan-frontend:
     docker:
@@ -114,7 +121,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontend-scan]
       - run:
           name: Run frontend scan
           command: |
@@ -123,6 +130,9 @@ jobs:
             npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-scan
       
   scan-backend:
     docker:
@@ -130,13 +140,16 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend-scan]
       - run:
           name: Run backend scan
           command: |
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-scan
 
   deploy-infrastructure:
     docker:
