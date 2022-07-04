@@ -459,7 +459,7 @@ jobs:
 
               sleep 60
 
-              if curl "${API_URL}/api/status" | grep "ok"
+              if curl -s http://${BACKEND_IP}:3030/api/status | grep "ok"
               then
 
                 echo SUCCESS
@@ -469,7 +469,7 @@ jobs:
 
                 echo FAIL
                 exit 1
-                
+
               fi
       
       - destroy-environment:
