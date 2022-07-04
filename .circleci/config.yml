@@ -456,14 +456,20 @@ jobs:
                 --output text)
               export API_URL="http://${BACKEND_IP}:3030"
               echo "API_URL = ${API_URL}"
+
               sleep 60
+
               if curl "${API_URL}/api/status" | grep "ok"
               then
+
                 echo SUCCESS
                 exit 0
+
               else
+
                 echo FAIL
                 exit 1
+                
               fi
       
       - destroy-environment:
