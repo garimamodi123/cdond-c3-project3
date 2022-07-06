@@ -566,8 +566,8 @@ jobs:
             echo OldWorkflowID: "${OldWorkflowID}"
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
-               echo "--deleting--below files and stacks-"
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              echo "--deleting--below files and stacks-"
+              aws s3 rb "s3://udapeople-${OldWorkflowID}" --force
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID:10:7}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID:10:7}"
             fi
