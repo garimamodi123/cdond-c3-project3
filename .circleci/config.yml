@@ -184,9 +184,11 @@ jobs:
           command: |
             # Your code here 
             cd .circleci/ansible
-            echo "[web]" > inventory.txt 
-            pwd          
-            cat inventory.txt
+            echo "[web]" > .circleci/ansible/inventory.txt 
+            pwd   
+            echo "[web]" > inventory.txt        
+            #cat inventory.txt
+            cat .circleci/ansible/inventory.txt
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=udapeople" --output text >> .circleci/ansible/inventory.txt
             #aws ec2 describe-instances \
              # --query 'Reservations[*].Instances[*].PublicIpAddress' \
