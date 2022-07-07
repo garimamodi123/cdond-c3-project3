@@ -1,0 +1,7 @@
+Public Url to GitHub repository (not private) [URL01]  :https://github.com/garimamodi123/cdond-c3-project3/tree/main/.circleci
+Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02] : http://udapeople-f2ddca8.s3-website-us-east-1.amazonaws.com/#/employees
+URL for my CloudFront distribution [URL03]: https://daagra5hmnigl.cloudfront.net/#/employees
+Public URLs to deployed application back-end in EC2 [URL04]:http://3.89.35.183:3030/api/status
+Public URL to your Prometheus Server [URL05]DNS: http://ec2-3-95-225-188.compute-1.amazonaws.com:9090/targets
+
+
